@@ -206,7 +206,7 @@ DQ DAG работает независимо от переобучения.
 
 ```bash
 git clone git@github.com:Poligonchik/MLOPS_hw3.git
-cd MLOps_hw3
+cd MLOPS_hw3
 ```
 
 ### 2. Создайте `.env` файл
