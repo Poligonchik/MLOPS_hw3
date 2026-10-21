@@ -49,18 +49,11 @@ def fit_catboost(preproc_info: dict) -> dict:
         loss_function="Logloss",
         eval_metric="AUC",
         auto_class_weights="Balanced",
-        early_stopping_rounds=20,
         random_seed=42,
         allow_writing_files=False,
         verbose=20,
     )
-    model.fit(
-        x_train,
-        y_train,
-        cat_features=CAT_FEATURES,
-        eval_set=(x_test, y_test),
-        use_best_model=True,
-    )
+    model.fit(x_train, y_train, cat_features=CAT_FEATURES)
 
     proba = model.predict_proba(x_test)[:, 1]
     pred = (proba > 0.5).astype(int)

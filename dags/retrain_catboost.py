@@ -13,6 +13,7 @@ from pipeline.retrain.preprocess_dataset import preprocess_dataset
 from pipeline.retrain.publish_model import publish_model
 from pipeline.retrain.slide_training_window import slide_training_window
 from pipeline.retrain.time_train_test_split import time_train_test_split
+from pipeline.retrain.check_model_quality import check_model_quality
 
 
 @dag(
@@ -48,7 +49,8 @@ def retrain_catboost():
     split = task(time_train_test_split, task_id="time_train_test_split")(slid)
     processed = task(preprocess_dataset, task_id="preprocess_dataset")(split)
     trained = task(fit_catboost, task_id="fit_catboost")(processed)
-    task(publish_model, task_id="publish_model")(trained)
+    checked = task(check_model_quality, task_id="check_model_quality")(trained)
+    task(publish_model, task_id="publish_model")(checked)
 
 
 retrain_catboost()

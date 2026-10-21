@@ -41,6 +41,13 @@ def add_features(df):
     df_["hour"] = df_["transaction_time"].dt.hour
     df_["minute"] = df_["transaction_time"].dt.minute
     df_["weekend"] = (df_["transaction_time"].dt.dayofweek > 4).astype(int)
+
+    df_["week_day"] = df_["transaction_time"].dt.dayofweek
+    t_time = pd.to_datetime(df_["transaction_time"], errors="raise")
+    df_["is_night"] = (t_time.dt.hour < 6).astype(int)
+    df_["amount"] = pd.to_numeric(df_["amount"], errors="raise")
+    df_["log_amount"] = np.log1p(df_["amount"])
+    
     return df_.drop(columns=["transaction_time", "name_1", "name_2", "street"])
 
 

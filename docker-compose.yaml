@@ -7,6 +7,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      JAVA_TOOL_OPTIONS: "-XX:-UseContainerSupport"
     ports:
       - "2181:2181"
 
@@ -20,6 +21,7 @@ services:
     ports:
       - "9095:9095"
     environment:
+      JAVA_TOOL_OPTIONS: "-XX:-UseContainerSupport"
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9095
@@ -36,6 +38,8 @@ services:
   # Сервис для создания топиков при старте
   kafka-setup:
     image: confluentinc/cp-kafka:7.3.0
+    environment:
+      JAVA_TOOL_OPTIONS: "-XX:-UseContainerSupport"
     depends_on:
       kafka:
         condition: service_healthy  # Ждем пока Kafka станет здоровой
@@ -202,6 +206,7 @@ services:
       - ./fraud_detector/src:/opt/airflow/fraud_src:ro
       - training_data:/opt/airflow/training_data
       - model_registry:/opt/airflow/models
+      - ./reports:/opt/airflow/reports
       - airflow_state:/opt/airflow/airflow_state
     ports:
       - "8081:8080"
